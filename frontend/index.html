@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FinanceAI</title>
+    <link rel="stylesheet" href="/static/css/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  </head>
+  <body>
+    <main id="auth-view" class="auth-layout">
+      <section class="brand-panel">
+        <div class="brand-mark">F</div>
+        <p class="eyebrow">FinanceAI</p>
+        <h1>Clareza para cada decisão financeira.</h1>
+        <p class="brand-copy">Acompanhe suas contas, entenda seus hábitos e organize o próximo passo.</p>
+      </section>
+      <section class="auth-card">
+        <div class="auth-heading">
+          <p class="eyebrow">Bem-vindo</p>
+          <h2 id="auth-title">Entrar na sua conta</h2>
+          <p id="auth-subtitle">Use seus dados para acessar seu painel financeiro.</p>
+        </div>
+        <form id="auth-form">
+          <label id="name-field" class="hidden">Nome completo<input id="full-name" type="text" autocomplete="name" /></label>
+          <label>E-mail<input id="email" type="email" autocomplete="email" required /></label>
+          <label>Senha<input id="password" type="password" autocomplete="current-password" minlength="8" required /></label>
+          <button class="primary-button" type="submit" id="auth-submit">Entrar</button>
+        </form>
+        <p id="auth-message" class="form-message" role="alert"></p>
+        <button class="link-button" id="auth-toggle" type="button">Ainda não tenho uma conta</button>
+      </section>
+    </main>
+
+    <main id="dashboard-view" class="dashboard-layout hidden">
+      <aside class="sidebar">
+        <div class="brand-lockup"><div class="brand-mark small">F</div><strong>FinanceAI</strong></div>
+        <nav><a class="active" href="#overview">Visão geral</a><a href="#accounts">Contas</a><a href="#transactions">Movimentações</a></nav>
+        <div class="sidebar-footer"><span id="user-name">Usuário</span><button id="logout-button" class="link-button">Sair</button></div>
+      </aside>
+      <section class="dashboard-content">
+        <header class="topbar"><div><p class="eyebrow">Visão geral</p><h1>Seu dinheiro, em perspectiva.</h1></div><div class="topbar-actions"><button id="new-account-button" class="secondary-button">Nova conta</button><button id="new-transaction-button" class="primary-button">Novo lançamento</button><button id="refresh-button" class="secondary-button">Atualizar</button></div></header>
+        <p id="dashboard-message" class="form-message" role="alert"></p>
+        <section class="metric-grid">
+          <article class="metric-card featured"><span>Saldo total</span><strong id="total-balance">R$ 0,00</strong><small>Em todas as contas</small></article>
+          <article class="metric-card"><span>Receitas do mês</span><strong id="monthly-income">R$ 0,00</strong><small class="positive">Entradas recebidas</small></article>
+          <article class="metric-card"><span>Despesas do mês</span><strong id="monthly-expenses">R$ 0,00</strong><small class="negative">Pagamentos realizados</small></article>
+          <article class="metric-card"><span>Economia mensal</span><strong id="monthly-savings">R$ 0,00</strong><small>Receitas menos despesas</small></article>
+        </section>
+        <section class="content-grid">
+          <article class="panel chart-panel"><div class="panel-heading"><div><p class="eyebrow">Evolução</p><h2>Receitas e despesas</h2></div><span class="panel-badge">6 meses</span></div><div class="chart-wrap"><canvas id="evolution-chart"></canvas></div></article>
+          <article class="panel"><div class="panel-heading"><div><p class="eyebrow">Composição</p><h2>Despesas por categoria</h2></div></div><div class="chart-wrap doughnut-wrap"><canvas id="category-chart"></canvas></div><div id="category-list" class="category-list"></div></article>
+        </section>
+        <section class="content-grid bottom-grid">
+          <article class="panel"><div class="panel-heading"><div><p class="eyebrow">Patrimônio</p><h2>Suas contas</h2></div><span id="account-count" class="panel-badge">0 contas</span></div><div id="accounts-list" class="accounts-list"></div></article>
+          <article class="panel insight-panel"><p class="eyebrow">Análise financeira</p><h2 id="insight-title">Vamos entender seus números.</h2><p id="insight-text">Adicione movimentações para receber uma leitura baseada nos seus dados reais.</p><div class="pending-pill"><span id="pending-count">0</span> movimentações pendentes</div></article>
+        </section>
+        <section class="panel assistant-panel"><div class="panel-heading"><div><p class="eyebrow">Meu assistente financeiro</p><h2>Pergunte sobre seus dados.</h2></div><span class="panel-badge">IA</span></div><div id="assistant-answer" class="assistant-answer">As respostas serão baseadas somente nas suas movimentações, contas e indicadores.</div><form id="assistant-form" class="assistant-form"><input id="assistant-question" type="text" maxlength="2000" placeholder="Ex.: quanto gastei neste mês?" required /><button class="primary-button" type="submit">Perguntar</button></form><p id="assistant-message" class="form-message" role="alert"></p></section>
+        <section class="panel transactions-panel"><div class="panel-heading"><div><p class="eyebrow">Atividade</p><h2>Movimentações recentes</h2></div></div><div id="transactions-list" class="transactions-list"></div></section>
+      </section>
+    </main>
+    <div id="modal" class="modal hidden"><div class="modal-card"><div class="panel-heading"><div><p class="eyebrow">FinanceAI</p><h2 id="modal-title">Nova conta</h2></div><button id="close-modal" class="close-button" type="button">×</button></div><form id="finance-form" class="finance-form"><div id="account-fields"><label>Nome da conta<input id="account-name" type="text" maxlength="120" required /></label><label>Instituição<input id="account-institution" type="text" maxlength="120" /></label><label>Tipo<select id="account-type"><option value="bank">Conta bancária</option><option value="wallet">Carteira</option><option value="digital">Conta digital</option><option value="savings">Poupança</option></select></label><label>Saldo inicial<input id="initial-balance" type="number" min="0" step="0.01" value="0" required /></label></div><div id="transaction-fields" class="hidden"><label>Conta<select id="transaction-account" required></select></label><label>Tipo<select id="transaction-type"><option value="expense">Despesa</option><option value="income">Receita</option></select></label><label>Descrição<input id="transaction-description" type="text" maxlength="255" required /></label><label>Valor<input id="transaction-amount" type="number" min="0.01" step="0.01" required /></label><label>Categoria<input id="transaction-category" type="text" maxlength="80" required /></label><label>Data<input id="transaction-date" type="date" required /></label><label>Status<select id="transaction-status"><option value="paid">Paga</option><option value="received">Recebida</option><option value="pending">Pendente</option></select></label></div><button class="primary-button" type="submit">Salvar</button><p id="modal-message" class="form-message" role="alert"></p></form></div></div>
+    <script src="/static/js/app.js"></script>
+  </body>
+</html>
